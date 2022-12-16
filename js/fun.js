@@ -7,8 +7,9 @@ window.onclick = e => {
 const before = document.querySelector("#before");
 const num = Math.floor(Math.random() * 6);
 console.log(num);
+const url = "https://github.com/Jeehay28/get-quote-of-the-day/blob/main/src/msg.json"
 
-fetch("../src/msg.json")
+fetch(url)
     .then(response => response.json())
     .then(obj => {
         console.log(typeof obj) // object
