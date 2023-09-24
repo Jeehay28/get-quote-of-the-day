@@ -1,4 +1,4 @@
-name: Deploy My Web Page
+name: Build and Deploy
 
 on:
   push:
@@ -6,24 +6,30 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Set the PERSONALACCESSTOKEN as an environment variable
-      - name: Set Environment Variables
-        env:
-          PERSONALACCESSTOKEN: ${{ secrets.PERSONALACCESSTOKEN }}
-        run: |
-          echo "PERSONALACCESSTOKEN=$PERSONALACCESSTOKEN" >> $GITHUB_ENV
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
 
-      # Run a build or deploy script here if needed
-      - name: Build and Deploy
-        run: |
-          # You can access the PERSONALACCESSTOKEN as $PERSONALACCESSTOKEN here
-          echo "Token: $PERSONALACCESSTOKEN"
+    - name: Install dependencies
+      run: npm install
 
-      # Additional steps for deploying your web page, e.g., copying files, pushing to a hosting service, etc.
+    - name: Build the application
+      run: npm run build
+
+    - name: Inject Personal Access Token
+      run: |
+        echo "window.PAT = '${{ secrets.PERSONALACCESSTOKEN }}';" >> dist/env.js
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
