@@ -1,4 +1,4 @@
-name: Quote Workflow
+name: Deploy My Web Page
 
 on:
   push:
@@ -6,28 +6,24 @@ on:
       - main
 
 jobs:
-  example_job:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Retrieve Personal Access Token
-        run: echo "${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> access_token.txt
-
-      - name: Use the Personal Access Token
+      # Set the PERSONALACCESSTOKEN as an environment variable
+      - name: Set Environment Variables
+        env:
+          PERSONALACCESSTOKEN: ${{ secrets.PERSONALACCESSTOKEN }}
         run: |
-          # Read the access token from the file
-          TOKEN=$(cat access_token.txt)
-          
-          # You can now use the $TOKEN variable in your scripts
-          echo "Access Token: $TOKEN"
+          echo "PERSONALACCESSTOKEN=$PERSONALACCESSTOKEN" >> $GITHUB_ENV
+
+      # Run a build or deploy script here if needed
+      - name: Build and Deploy
+        run: |
+          # You can access the PERSONALACCESSTOKEN as $PERSONALACCESSTOKEN here
+          echo "Token: $PERSONALACCESSTOKEN"
+
+      # Additional steps for deploying your web page, e.g., copying files, pushing to a hosting service, etc.
