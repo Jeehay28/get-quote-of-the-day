@@ -6,7 +6,7 @@ window.onclick = e => {
 // https://api.github.com/repos/:owner/:repo/contents/:path
 
 const url = "https://api.github.com/repos/Jeehay28/get-quote-of-the-day/contents/src/msg.json";
-const personalAccessToken = process.env.PERSONALACCESSTOKEN;
+const personalAccessToken = window.PAT;
 
 const headers = new Headers({
     'Authorization': `token ${personalAccessToken}`,
