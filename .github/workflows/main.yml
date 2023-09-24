@@ -1,0 +1,33 @@
+name: Quote Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Retrieve Personal Access Token
+        run: echo "${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> access_token.txt
+
+      - name: Use the Personal Access Token
+        run: |
+          # Read the access token from the file
+          TOKEN=$(cat access_token.txt)
+          
+          # You can now use the $TOKEN variable in your scripts
+          echo "Access Token: $TOKEN"
