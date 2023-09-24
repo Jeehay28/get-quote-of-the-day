@@ -33,24 +33,40 @@ const before = document.querySelector("#before");
 //              <h2 style="color : grey">${obj.quotes[num].author}</h2>`
 //     })
 
-fetch(url, requestOptions)
-.then(response => response.json())
-.then(data => {
-    // Decode the Base64 content
-    const content = atob(data.content);
-    const obj = JSON.parse(content);
+// fetch(url, requestOptions)
+// .then(response => response.json())
+// .then(data => {
+//     // Decode the Base64 content
+//     const content = atob(data.content);
+//     const obj = JSON.parse(content);
     
-    console.log(obj.quotes.length);
-    const num = Math.floor(Math.random() * obj.quotes.length);
-    console.log(num);
+//     console.log(obj.quotes.length);
+//     const num = Math.floor(Math.random() * obj.quotes.length);
+//     console.log(num);
 
-    if (obj.quotes && obj.quotes[num]) {
-        // Check if obj.quotes[num] exists before accessing its properties
-        before.innerHTML =
-            `<h2>${obj.quotes[num].quote}</h2>
-             <h2 style="color : grey">${obj.quotes[num].author}</h2>`;
-    } else {
-        console.error('Invalid index or data structure.');
-    }
-})
-.catch(error => console.error('Error:', error));
+//     if (obj.quotes && obj.quotes[num]) {
+//         // Check if obj.quotes[num] exists before accessing its properties
+//         before.innerHTML =
+//             `<h2>${obj.quotes[num].quote}</h2>
+//              <h2 style="color : grey">${obj.quotes[num].author}</h2>`;
+//     } else {
+//         console.error('Invalid index or data structure.');
+//     }
+// })
+// .catch(error => console.error('Error:', error));
+
+
+fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(obj => {
+        if (obj.quotes && obj.quotes.length > 0) {
+            const num = Math.floor(Math.random() * obj.quotes.length);
+            const quote = obj.quotes[num];
+            before.innerHTML =
+                `<h2>${quote.quote}</h2>
+                 <h2 style="color: grey">${quote.author}</h2>`;
+        } else {
+            console.error('Invalid JSON data structure or no quotes found.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
